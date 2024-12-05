@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docomo AnimeStore Episode Thumbnail Fetcher</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            background: black;
+            color: #00ff00;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px #00ff00;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        input, button {
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            background-color: #222;
+            color: #00ff00;
+            font-size: 1em;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        button:hover {
+            background-color: #333;
+            cursor: pointer;
+        }
+
+        #thumbnail {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 60vh;
+            overflow-y: auto;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #thumbnail img {
+            width: 100%;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #00ff00;
+            transition: transform 0.2s;
+        }
+
+        #thumbnail img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Docomo Anime Episode Thumbnail Fetcher</h1>
+    <label for="episodeID">Enter Episode ID:</label>
+    <input type="text" id="episodeID" placeholder="e.g., 27355005">
+    <button id="fetchButton">Get Thumbnails</button>
+
+    <div id="thumbnail"></div>
+
+    <script>
+        document.getElementById('fetchButton').addEventListener('click', function () {
+            const episodeID = document.getElementById('episodeID').value;
+
+            if (!episodeID || isNaN(episodeID)) {
+                alert('Please enter a valid numeric Episode ID.');
+                return;
+            }
+
+            // Generate thumbnail URLs based on the episode ID
+            let thumbnailHTML = '';
+            for (let i = 1; i <= 500; i++) { // Adjust if needed
+                const paddedIndex = String(i).padStart(5, '0');
+                const url = `https://cs1.animestore.docomo.ne.jp/img/${episodeID.slice(0, 5)}/${episodeID}/thumbnails/${episodeID}_${paddedIndex}.jpg`;
+
+                thumbnailHTML += `
+                    <img src="${url}" alt="Thumbnail ${paddedIndex}" onload="console.log('Loaded: ${url}')" onerror="console.error('Failed to load: ${url}')">
+                `;
+            }
+
+            document.getElementById('thumbnail').innerHTML = thumbnailHTML;
+        });
+    </script>
+</body>
+</html>
