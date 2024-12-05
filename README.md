@@ -1,4 +1,4 @@
-# anip_y
+# thumbnails
 script provided by @ani_py for rakuten anime thumbnails before release
 
 <h4>Rakuten (provided by him) - https://tv.rakuten.co.jp/genre/animation/</h4>
