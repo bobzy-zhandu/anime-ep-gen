@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Thumbnail Fetcher</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            background: black;
+            color: #00ff00;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px #00ff00;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        input, button {
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            background-color: #222;
+            color: #00ff00;
+            font-size: 1em;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        button:hover {
+            background-color: #333;
+            cursor: pointer;
+        }
+
+        /* Thumbnail Grid */
+        #thumbnail {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 60vh; /* Set max height for scrollable area */
+            overflow-y: auto; /* Enable vertical scrolling */
+            border: 2px solid #00ff00; /* Add border around thumbnails */
+            border-radius: 5px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent background */
+        }
+
+        #thumbnail img {
+            width: 100%; /* Make images responsive */
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #00ff00;
+            transition: transform 0.2s;
+        }
+
+        #thumbnail img:hover {
+            transform: scale(1.05); /* Zoom effect on hover */
+        }
+
+        /* Glitch effect */
+        .glitch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://media.giphy.com/media/3o7aD2saLq7b6w8k8I/giphy.gif');
+            background-size: cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="glitch"></div>
+    <h1>Anime Thumbnail Fetcher</h1>
+    <label for="contentNumber">Enter Content Number:</label>
+    <input type="text" id="contentNumber" placeholder="e.g., 473852">
+    <button id="fetchButton">Get Thumbnails</button>
+
+    <div id="thumbnail"></div>
+
+    <script>
+        document.getElementById('fetchButton').addEventListener('click', function() {
+            const contentNumber = document.getElementById('contentNumber').value;
+            if (contentNumber.length < 6) {
+                alert('Please enter a valid content number (6 digits).');
+                return;
+            }
+
+            // Extract the last two digits
+            const lastTwoDigits = contentNumber.slice(-2);
+            const middleTwoDigits = contentNumber.slice(-4, -2);
+
+            // Swap the last two digits
+            const swappedLastTwo = lastTwoDigits.split('').reverse().join('');
+            const swappedMiddleTwo = middleTwoDigits.split('').reverse().join('');
+
+            // Generate HTML for thumbnails
+            let thumbnailHTML = '';
+            for (let i = 1; i <= 290; i++) {
+                const paddedIndex = String(i).padStart(4, '0'); // Pad index with leading zeros
+                const newUrl = `https://im.akimg.tv.rakuten.co.jp/chapter/${swappedMiddleTwo}/${swappedLastTwo}/${contentNumber}/${paddedIndex}.jpg`;
+                thumbnailHTML += `
+                    <img src="${newUrl}" alt="Thumbnail ${paddedIndex}" onload="console.log('Loaded thumbnail ${paddedIndex}')" onerror="console.error('Failed to load thumbnail ${paddedIndex}: ${newUrl}')">
+                `;
+            }
+
+            // Display the thumbnails in the same tab
+            document.getElementById('thumbnail').innerHTML = thumbnailHTML;
+        });
+    </script>
+</body>
+</html>
